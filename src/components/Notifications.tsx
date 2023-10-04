@@ -5,17 +5,17 @@ import io from 'socket.io-client'
 import icon from '@/app/favicon.ico'
 
 const Notifications = () => {
-
-  Notification.requestPermission().then((permission) => {
-    if (permission === "granted") {
-      console.log("Permissão concedida para exibir notificações.");
-    } else {
-      console.log("Permissão negada para exibir notificações.");
-    }
-  });
   
   useEffect(() => {
     const socket = io('http://localhost:5000');
+
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Permissão concedida para exibir notificações.");
+      } else {
+        console.log("Permissão negada para exibir notificações.");
+      }
+    });
 
     socket.on('notification', (data) => {
       console.log('Received notification:', data);
