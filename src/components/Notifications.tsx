@@ -1,14 +1,22 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import io from 'socket.io-client'
 import icon from '@/app/favicon.ico'
 
 const Notifications = () => {
+  const [hasBrowserNotification, setHasBrowserNotification] = useState(false)
   
   useEffect(() => {
-    const socket = io('http://localhost:5000');
-
+    if (!("Notification" in window)) {
+      console.log("Este navegador não suporta notificações.");
+    }
+    else {
+      setHasBrowserNotification(true)
+    }
+  }, [])
+    
+  useEffect(() => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
         console.log("Permissão concedida para exibir notificações.");
@@ -16,8 +24,10 @@ const Notifications = () => {
         console.log("Permissão negada para exibir notificações.");
       }
     });
+    
+    const socket = io('http://localhost:5000');
 
-    socket.on('notification', (data) => {
+    socket.on('notification', (data: any) => {
       console.log('Received notification:', data);
 
       const options = {

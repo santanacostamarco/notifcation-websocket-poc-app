@@ -1,4 +1,5 @@
 import Notifications from '@/components/Notifications'
+
 export default function Home() {
 
   return (
